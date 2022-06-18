@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;900&family=Oswald:wght@400;600;700&display=swap');
+body{
+	font-family: 'Lato', sans-serif;
+	color: #002c3f;
+	font-size: 16px;
+	line-height: 30px;
+	font-weight: normal;
+}
+h1{
+	color: #00a359;
+	font-family: 'Oswald', sans-serif;
+	font-weight: bold;
+	text-decoration: none;
+}
+a{
+	color: #00a359;
+	text-decoration: none;
+}
+em{
+	color: #c9232b;
+	font-style: normal;
+}
+i{
+	color: #00a359;
+	font-size: 18px;
+	font-weight: bold;
+}
+.active i{
+	color: #fff;
+}
+.form-control{
+	box-shadow: none !important;
+}
+.input-group-text{
+	padding: .61rem .75rem
+}
+.btn-primary{
+	background: #00a359;
+	font-family: 'Lato', sans-serif;
+	font-weight: bold;
+	border-color: #00a359;
+	letter-spacing: 1px;
+	line-height: 1;
+	text-transform: uppercase;
+}
+.form-control {
+	border: 1px solid rgba(0,0,0,0.32);
+	border-radius: 4px;
+	color: rgba(0,0,0,0.6);
+	font-size: 18px;
+	letter-spacing: 0.15px;
+	line-height: 22px;
+	padding: 1rem;
+	height: auto;
+}
+.form-group {
+	margin-bottom: 1rem;
+}
+/*Sign Up*/
+body.login main {
+	background: #fff;
+	box-shadow: none;
+	border: 1px solid rgba(46,91,255,0.08);
+	border-radius: 1px;
+	padding: 0;
+	width: 450px;
+	margin: 0 auto;
+	display: block;
+}
+.login p {
+	font-size: 15px;
+	color: #8798AD;
+	line-height: 24px;
+}
+.login  .form-group i{
+   position: absolute;
+   right: 15px;
+   top: 1rem;
+   color: rgba(0,0,0,0.38);
+}
+.form-group {
+	position: relative;
+	display: block;
+	clear: both;
+}
+.login form label, 
+.login form label a {
+   color: rgba(0,0,0,0.38);
+   font-size: 13px;
+   letter-spacing: 0.4px;
+   line-height: 16px;
+   padding-left: 1rem;
+   padding-bottom: 5px;
+}
+ul.nav.crypto_payment li a.nav-link{
+	color: #383d41;
+	background-color: #e2e3e5;
+	border-color: #d6d8db;
+	margin-bottom: 1rem;
+}
+ul.nav.crypto_payment li a.nav-link.active{
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+@media only screen and (max-width:576px){
+    body.login main{
+        width: 90%;
+    }
+	body.login main .account-info{
+		margin: 0 auto;
+		text-align: center;
+		display: block;
+	}
+}
