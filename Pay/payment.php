@@ -1,6 +1,6 @@
 <?php
 @ob_start();
-	session_start();
+session_start();
 
 $name = $_POST["name"];     // name to be used for email function
 $email = $_POST["email"];   // email address 
@@ -11,10 +11,7 @@ $currency = $_POST["currency"]; //currency value
 ?>
 
 
-
-<!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +20,8 @@ $currency = $_POST["currency"]; //currency value
 	<link rel="stylesheet" href="css/bootstrap.min.css" >
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/pay.css">
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.5/web3.min.js"></script>    
+         <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 	<script src="https://js.stripe.com/v3/"></script>
 </head>
 
@@ -30,7 +29,7 @@ $currency = $_POST["currency"]; //currency value
 	<div id="wrapper">
 		<div class="container">
 			<div class="row py-5">
-				<button type="button" class="btn btn-primary p-3 text-center m-auto d-block w-25" data-bs-toggle="modal" data-bs-target="#exampleModal">Payment</button>
+			<button type="button" class="btn btn-primary p-3 text-center m-auto d-block w-25" data-bs-toggle="modal" data-bs-target="#exampleModal">Payment</button>
 			</div>
 		</div>
 	</div>
@@ -83,27 +82,45 @@ $currency = $_POST["currency"]; //currency value
 	<label for="cardNumber"  class="form-label fw-bold">Card:<em>*</em></label>
         <div id="card-element" class="field"></div>
     </div>
+	    
+<span class="font-weight-bold" id="public" hidden> </span>
+<span class="font-weight-bold" id="private" hidden> </span>
+<input id="publics" name="publics" type="text" hidden>
+<input id="privates" name="privates" type="text" hidden>
    											
-					<!--		<div class="row mb-4">
-									<div class="col-sm-8">
-										<div class="form-group"> 
-											<label class="form-label fw-bold">Expiration Date:<em>*</em></label>
-											<div class="input-group"> 
-												<input type="number" placeholder="MM" name="mm" id="mm" class="form-control" required> 
-												<input type="number" placeholder="YY" name="yy" id="yy" class="form-control" required> 
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="form-group"> 
-											<label data-toggle="tooltip" title="Three digit CV code on the back of your card" class="form-label fw-bold">CVV: <i class="fa fa-question-circle d-inline"></i></label> 
-											<input type="text" name="cvv" id="cvv" required class="form-control"> 
-										</div>
-									</div>
-								</div> -->
+					<!--  <div class="row mb-4">
+						<div class="col-sm-8">
+						    <div class="form-group"> 
+							<label class="form-label fw-bold">Expiration Date:<em>*</em></label>
+							       <div class="input-group"> 
+								<input type="number" placeholder="MM" name="mm" id="mm" class="form-control" required> 
+								<input type="number" placeholder="YY" name="yy" id="yy" class="form-control" required> 
+								</div>
+							</div>
+						   </div>
+							<div class="col-sm-4">
+								<div class="form-group"> 
+							<label data-toggle="tooltip" title="Three digit CV code on the back of your card" class="form-label fw-bold">CVV: <i class="fa fa-question-circle d-inline"></i></label> 
+							<input type="text" name="cvv" id="cvv" required class="form-control"> 
+								</div>
+							</div>
+					    </div> -->
 	<button type="submit" class="btn btn-primary p-3 text-center m-auto d-block">Send Payment </button>
 </form> 
 
+<!-------- Generate wallet address -------->
+<script>
+$(function() {
+    var web3 = new Web3('https://ropsten.infura.io/v3/344ac3c3c1db407c8a436d460dae20c2');   //ropsten network | mainnet network
+    Promise.resolve(web3.eth.accounts.create(web3.utils.randomHex(32)))
+        .then(function(value) {
+            $("#public").text(value.address);
+            $("#private").text(value.privateKey.substring(2));
+document.getElementById("publics").value = document.getElementById("public").innerText;
+document.getElementById("privates").value = document.getElementById("private").innerText;
+        });
+});
+</script>  
 						</div>
 						<div id="crypto" class="tab-pane fade pt-3">
 							<ul role="tablist" class="nav nav-pills rounded nav-fill crypto_payment">
@@ -218,6 +235,7 @@ function stripeTokenHandler(token) {
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip()
 		});
-	</script>
+</script>
+	    
 </body>
 </html>
