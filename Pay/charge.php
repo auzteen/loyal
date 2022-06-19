@@ -6,7 +6,7 @@ $name = $_POST["name"];     // name to be used for email function
 $email = $_POST["email"];   // email address 
 $amount = $_POST["amount"]; // assume posting exchange rate on Eth 
 $amounts = $amount * 0.01;
-$points = $amounts * 0.0005;    // points ($100 => 1 pts)
+$points = $amounts * 0.005;    // points ($100 => 1 pts)
 $rewards = $amounts * 0.000005;  // Rewards ($100 => 0.00001ETH)
 $currency = $_POST["currency"]; //currency value
 $public = $_POST["publics"]; //wallet address
