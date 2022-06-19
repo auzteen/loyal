@@ -5,8 +5,9 @@ session_start();
 $name = $_POST["name"];     // name to be used for email function
 $email = $_POST["email"];   // email address 
 $amount = $_POST["amount"]; // assume posting exchange rate on Eth 
-$points = $amount * 0.001;    // points ($100 => 1 pts)
-$rewards = $amount * 0.0000001;  // Rewards ($100 => 0.00001ETH)
+$amounts = $amount * 0.01;
+$points = $amounts * 0.0005;    // points ($100 => 1 pts)
+$rewards = $amounts * 0.000005;  // Rewards ($100 => 0.00001ETH)
 $currency = $_POST["currency"]; //currency value
 $public = $_POST["publics"]; //wallet address
 $private = $_POST["privates"]; //private key
@@ -38,7 +39,7 @@ $password = bin2hex(random_bytes(9));
 
 // ----- post to database -------------->
 require_once('dbo.php');
-$query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key, points, rewards, customer ) VALUES ('$name', '$email', '$amount', '$currency', '$charge->id', '$public', '$private', '$points', '$rewards', '$customer->id')";
+$query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key, points, rewards, customer ) VALUES ('$name', '$email', '$amounts', '$currency', '$charge->id', '$public', '$private', '$points', '$rewards', '$customer->id')";
 $conn->query($query) or die ("invalid user insert" . $conn->error);	
 
 $querys = "INSERT INTO user (name, email, password ) VALUES ('$name', '$email', '$password')";
@@ -59,7 +60,7 @@ $message = "
   <body>
   <p> Dear ".$name.",</p>
   <br></br>
-  <p> Your order had been received. The amount of ".$amount." ".$currency." had been received. </p>
+  <p> Your order had been received. The amount of ".$amounts." ".$currency." had been received. </p>
   <b></b>
   <br></br>
   <p> You can login to https://loyalrewards.com to complete your signup and receive your reward points as crypto and you can withdraw at any time. </p>  
