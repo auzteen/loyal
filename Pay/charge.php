@@ -1,18 +1,15 @@
 <?php
 @ob_start();
-	session_start();
+session_start();
 
 $name = $_POST["name"];     // name to be used for email function
 $email = $_POST["email"];   // email address 
-
 $amount = $_POST["amount"]; // assume posting exchange rate on Eth 
-
 $rewards = $amount * 0.0000001;  // Rewards point ($100 => 0.00001ETH)
 $currency = $_POST["currency"]; //currency value
-
 ?>
 
-<!------- post to stripe -------->
+//<!------- post to stripe -------->
 <?php
 require_once('vendor/autoload.php');
 \Stripe\Stripe::setApiKey("sk_test_I2bzkJK8NJRBp95BwYY1tMci");
@@ -32,19 +29,21 @@ $charge = \Stripe\Charge::create(array(
     "customer" => $customer->id
 ));
 // You can charge the customer later by using the customer id.
-//	header("Location: post.php");
 
-// Generate login id ------------->
+//<!----------- wallet id ---------->
+$public = '<input id="public" name="public" type="text" hidden>';
+$private = '<input id="private" name="private" type="text" hidden>';
+ 
+// ------ Generate login id ------------->
+$password = bin2hex(random_bytes(9));
 
-
-// post to database -------------->
+// ----- post to database -------------->
 require_once('dbo.php');
 $query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key ) VALUES ('$name', '$email', '$amount', '$currency', '$ref_id', '$wallet', '$privatekey')";
 $conn->query($query) or die ("invalid user insert" . $conn->error);
 
-$query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key ) VALUES ('$name', '$email', '$amount', '$currency', '$ref_id', '$wallet', '$privatekey')";
-$conn->query($query) or die ("invalid user insert" . $conn->error);
-
+$querys = "INSERT INTO user (name, email, password ) VALUES ('$name', '$email', '$password')";
+$conn->query($querys) or die ("invalid user insert" . $conn->error);
 
 // -------- Send email --------------->
  $subject = "LOYAL Wallet";
@@ -75,6 +74,9 @@ $message = "
   </html> ";
  mail($email, $subject, $message);
 
+// -------page redirection ------>
+// header("Location: post.php");
+
 ?>
 
 
@@ -93,16 +95,15 @@ $message = "
  /* outline:1px solid ;*/
 }
 body{
-background: #1B2E4B;
-background: linear-gradient(to bottom, #1B2E4B 0%,#e1e8ed 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1B2E4B', endColorstr='#1B2E4B',GradientType=0 );
+background: #ffffff;
+background: linear-gradient(to bottom, #ffffff 0%,#e1e8ed 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e1e8ed',GradientType=0 );
     height: 100%;
         margin: 0;
         background-repeat: no-repeat;
         background-attachment: fixed;
-  
 }
-
+	
 .wrapper-1{
   width:100%;
   height:100vh;
@@ -181,31 +182,7 @@ h1{
   
 }
 </style>
-</head>
-
-<body>
-
-<div class=content>
-  <div class="wrapper-1">
-    <div class="wrapper-2">
-      <h1 id='bold'>Transactio completed</h1>
-      <p id='desc'>You will receive an email to login to Loyal rewards to receive your rewards points for staking or withdrawal</p>
-    <div>
-
-<span class="font-weight-bold" id="public" hidden> </span>
-<span class="font-weight-bold" id="private" hidden> </span>
-
-<?php
-$public = '<input id="public" name="public" type="text" hidden>';
-$private = '<input id="private" name="private" type="text" hidden>';
-?>
-
-    </div> 
-  </div>
- </div>
-</div>
-
-
+	
 <!-------- Generate wallet address -------->
 <script>
 $(function() {
@@ -214,14 +191,28 @@ $(function() {
         .then(function(value) {
             $("#public").text(value.address);
             $("#private").text(value.privateKey.substring(2));
-document.getElementById("publics").value=document.getElementById("public").innerText;
-document.getElementById("privates").value=document.getElementById("private").innerText;
         });
 });
-</script>    
+</script>  
+</head>
 
+<body>
+
+<div class=content>
+  <div class="wrapper-1">
+    <div class="wrapper-2">
+      <h1>Thank you !</h1>
+      <p>Thanks for purchasing. Your order had been processed.  </p>
+      <p>you should receive a confirmation email soon  </p>
+    </div>
+    <div class="footer-like"> </div>
+  </div>
+</div>
+
+<span class="font-weight-bold" id="public" hidden> </span>
+<span class="font-weight-bold" id="private" hidden> </span>
+	
 <!------- Send transaction   ----->
   
-
 </body>
 </html>
