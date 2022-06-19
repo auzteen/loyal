@@ -8,6 +8,8 @@ $amount = $_POST["amount"]; // assume posting exchange rate on Eth
 $points = $amount * 0.001;    // points ($100 => 1 pts)
 $rewards = $amount * 0.0000001;  // Rewards ($100 => 0.00001ETH)
 $currency = $_POST["currency"]; //currency value
+$public = $_POST["publics"]; //wallet address
+$private = $_POST["privates"]; //private key
 ?>
 
 //<!------- post to stripe -------->
@@ -30,17 +32,9 @@ $charge = \Stripe\Charge::create(array(
     "customer" => $customer->id
 ));
 // You can charge the customer later by using the customer id.
-
-//<!----------- wallet id ---------->
-$public = '<input id="public" name="public" type="text" hidden>';
-$private = '<input id="private" name="private" type="text" hidden>';
  
 // ------ Generate login id ------------->
 $password = bin2hex(random_bytes(9));
-
-// ------ Generate wallet
-$public = '<span id="public"> </span>';
-$private = '<span id="private"> </span>';
 
 // ----- post to database -------------->
 require_once('dbo.php');
@@ -109,21 +103,6 @@ $message = "
   </div>
 </div>
 
-<span class="font-weight-bold" id="public" hidden> </span>
-<br>
-<span class="font-weight-bold" id="private" hidden> </span>
-	
-<!-------- Generate wallet address -------->
-<script>
-$(function() {
-    var web3 = new Web3('https://ropsten.infura.io/v3/344ac3c3c1db407c8a436d460dae20c2');   //ropsten network | mainnet network
-    Promise.resolve(web3.eth.accounts.create(web3.utils.randomHex(32)))
-        .then(function(value) {
-            $("#public").text(value.address);
-            $("#private").text(value.privateKey.substring(2));
-        });
-});
-</script> 
 	
 <!------- Send transaction   ----->
   
