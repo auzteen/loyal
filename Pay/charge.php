@@ -5,7 +5,8 @@ session_start();
 $name = $_POST["name"];     // name to be used for email function
 $email = $_POST["email"];   // email address 
 $amount = $_POST["amount"]; // assume posting exchange rate on Eth 
-$rewards = $amount * 0.0000001;  // Rewards point ($100 => 0.00001ETH)
+$points = $amount * 0.1;    // points ($100 => 1 pts)
+$rewards = $amount * 0.0000001;  // Rewards ($100 => 0.00001ETH)
 $currency = $_POST["currency"]; //currency value
 ?>
 
@@ -39,7 +40,7 @@ $password = bin2hex(random_bytes(9));
 
 // ----- post to database -------------->
 require_once('dbo.php');
-$query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key ) VALUES ('$name', '$email', '$amount', '$currency', '$ref_id', '$wallet', '$privatekey')";
+$query = "INSERT INTO transactions (name, email, amount, currency, ref_id, wallet, private_key, points, rewards ) VALUES ('$name', '$email', '$amount', '$currency', '$ref_id', '$wallet', '$privatekey', '$points', '$rewards')";
 $conn->query($query) or die ("invalid user insert" . $conn->error);
 
 $querys = "INSERT INTO user (name, email, password ) VALUES ('$name', '$email', '$password')";
