@@ -124,7 +124,6 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-        <img src="https://" className="App-logo" alt="logo" height="32"/>
           <b>Loyal Rewards Point</b>
         </a>
         </nav>
