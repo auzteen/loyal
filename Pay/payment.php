@@ -7,8 +7,50 @@ $email = $_POST["email"];   // email address
 $amounts = $_POST["amount"]; // assume posting exchange rate on Eth 
 $amount = $amounts * 100;   // value in cents for payments
 $currency = $_POST["currency"]; //currency value
-?>
 
+$orderId = $_POST['email'];
+
+$url = "https://pay.heebo.io/api/v1/stores/ERMcU5aEGo5zUTvjqN6zG3sUyNHQeqEu6hAMcnKvyCPt/invoices";
+
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+$headers = array(
+   "Authorization: Basic YW5keWJ1Z3oyMDAwQGdtYWlsLmNvbTpwc2FsbTIz",
+   "Content-Type: application/json",
+);
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+$data = json_encode( array("amount" => $amount, "currency" => $currency ) );
+
+curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+//for debug only!
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+$resp = curl_exec($curl);
+curl_close($curl);
+//var_dump($resp);
+
+$JSON = json_decode($resp, true);
+
+$pay = $amounts .  $currency;
+$link = $JSON["checkoutLink"];      
+// "https://pay.heebo.io/i/" . $id; 
+$status = 'Processing'; //$JSON["status"];
+//$title = $myJSON["title"];
+$date = date("Y-m-d H:i:s");
+
+require('dbo.php');
+$query="INSERT INTO crypto_transactions (title, amount, type, link, date, status, username) VALUES('$orderId','$pay','Invoice', '$link', '$date', '$status', '$name') ";
+$run = mysqli_query($conn, $query);
+
+//echo "<meta http-equiv='refresh' content='0'>"; 
+//header("Location:accept_crypto.php");
+
+?>
 
 <html>
 <head>
@@ -123,12 +165,12 @@ document.getElementById("privates").value = document.getElementById("private").i
 						</div>
 						<div id="crypto" class="tab-pane fade pt-3">
 							<ul role="tablist" class="nav nav-pills rounded nav-fill crypto_payment">
-								<li class="nav-item">
+							<!--  <li class="nav-item">
 									<a data-toggle="pill" href="#qr" class="nav-link active fw-bold"> 
 										Pay With Crypto 
 									</a> 
 								</li>
-							<!--	<li class="nav-item">
+								<li class="nav-item">
 									<a data-toggle="pill" href="#wallet" class="nav-link fw-bold"> 
 										Pay With Wallet
 									</a> 
@@ -164,54 +206,6 @@ document.getElementById("privates").value = document.getElementById("private").i
 			</div>
         </div>
      </div>
-<?php
-
-
-$orderId = $_POST['email'];
-
-$url = "https://pay.heebo.io/api/v1/stores/ERMcU5aEGo5zUTvjqN6zG3sUyNHQeqEu6hAMcnKvyCPt/invoices";
-
-$curl = curl_init($url);
-curl_setopt($curl, CURLOPT_URL, $url);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-$headers = array(
-   "Authorization: Basic YW5keWJ1Z3oyMDAwQGdtYWlsLmNvbTpwc2FsbTIz",
-   "Content-Type: application/json",
-);
-curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-$data = json_encode( array("amount" => $amount, "currency" => $currency ) );
-
-curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-//for debug only!
-curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-$resp = curl_exec($curl);
-curl_close($curl);
-//var_dump($resp);
-
-$JSON = json_decode($resp, true);
-
-$pay = $amount .  $currency;
-$link = $JSON["checkoutLink"];      
-// "https://pay.heebo.io/i/" . $id; 
-$status = 'Processing'; //$JSON["status"];
-//$title = $myJSON["title"];
-$date = date("Y-m-d H:i:s");
-
-require('dbo.php');
-$query="INSERT INTO crypto_transactions (title, amount, type, link, date, status, username) VALUES('$orderId','$pay','Invoice', '$link', '$date', '$status', '$name') ";
-$run = mysqli_query($conn, $query);
-
-//echo "<meta http-equiv='refresh' content='0'>"; 
-//header("Location:accept_crypto.php");
-
-?>
-
-
 
 
 
