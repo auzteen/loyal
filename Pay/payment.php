@@ -126,23 +126,24 @@ document.getElementById("privates").value = document.getElementById("private").i
 							<ul role="tablist" class="nav nav-pills rounded nav-fill crypto_payment">
 								<li class="nav-item">
 									<a data-toggle="pill" href="#qr" class="nav-link active fw-bold"> 
-										Pay With QR  
+										Pay With Crypto 
 									</a> 
 								</li>
-								<li class="nav-item">
+							<!--	<li class="nav-item">
 									<a data-toggle="pill" href="#wallet" class="nav-link fw-bold"> 
 										Pay With Wallet
 									</a> 
-								</li>
+								</li> -->
 							</ul>
 							<div class="tab-content">
 								<div id="qr" class="tab-pane fade show active pt-3">
 									<form role="form">
-										<img src="images/qr_code.png" class="img-fluid text-center m-auto d-block mb-4" /> 
-										<button type="submit" class="btn btn-primary p-3 text-center m-auto d-block">Send Payment</button>
+										<!--<img src="images/qr_code.png" class="img-fluid text-center m-auto d-block mb-4" /> 
+										<button type="submit" class="btn btn-primary p-3 text-center m-auto d-block">Send Payment</button> -->
+										<iframe src="<?php echo $link; ?>" scrolling="no" frameborder="0" margin="0" style="width: 350px; height: 520px; overflow: hidden;"></iframe>
 									</form>
 								</div>
-								<div id="wallet" class="tab-pane fade pt-3">
+							<!--	<div id="wallet" class="tab-pane fade pt-3">
 									<form role="form">
 										<div class="form-group mb-3"> 
 											<label for="username" class="form-label fw-bold">Source Wallet:<em>*</em></label> 
@@ -155,7 +156,7 @@ document.getElementById("privates").value = document.getElementById("private").i
 										<button type="submit" class="btn btn-primary p-3 text-center m-auto d-block">Send Payment</button>
 									</form>
 
-								</div>
+								</div> -->
 							</div>
 							
 						</div>
@@ -164,6 +165,57 @@ document.getElementById("privates").value = document.getElementById("private").i
 			</div>
         </div>
      </div>
+<?php
+
+
+$orderId = $_POST['email'];
+
+$url = "https://pay.heebo.io/api/v1/stores/ERMcU5aEGo5zUTvjqN6zG3sUyNHQeqEu6hAMcnKvyCPt/invoices";
+
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+$headers = array(
+   "Authorization: Basic YW5keWJ1Z3oyMDAwQGdtYWlsLmNvbTpwc2FsbTIz",
+   "Content-Type: application/json",
+);
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+$data = json_encode( array("amount" => $amount, "currency" => $currency ) );
+
+curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+//for debug only!
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+$resp = curl_exec($curl);
+curl_close($curl);
+//var_dump($resp);
+
+$JSON = json_decode($resp, true);
+
+$pay = $amount .  $currency;
+$link = $JSON["checkoutLink"];      
+// "https://pay.heebo.io/i/" . $id; 
+$status = 'Processing'; //$JSON["status"];
+//$title = $myJSON["title"];
+$date = date("Y-m-d H:i:s");
+
+//echo $link;
+//require('dbo.php');
+$query="INSERT INTO crypto_transactions (title, amount, type, link, date, status, username) VALUES('$orderId','$pay','Invoice', '$link', '$date', '$status', '$name') ";
+
+//$run = mysqli_query($conn, $query);
+
+//echo "<meta http-equiv='refresh' content='0'>"; 
+//header("Location:accept_crypto.php");
+
+?>
+
+
+
 
 
 <script>
