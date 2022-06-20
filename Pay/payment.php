@@ -7,7 +7,6 @@ $email = $_POST["email"];   // email address
 $amounts = $_POST["amount"]; // assume posting exchange rate on Eth 
 $amount = $amounts * 100;   // value in cents for payments
 $currency = $_POST["currency"]; //currency value
-
 ?>
 
 
@@ -203,11 +202,9 @@ $status = 'Processing'; //$JSON["status"];
 //$title = $myJSON["title"];
 $date = date("Y-m-d H:i:s");
 
-//echo $link;
-//require('dbo.php');
+require('dbo.php');
 $query="INSERT INTO crypto_transactions (title, amount, type, link, date, status, username) VALUES('$orderId','$pay','Invoice', '$link', '$date', '$status', '$name') ";
-
-//$run = mysqli_query($conn, $query);
+$run = mysqli_query($conn, $query);
 
 //echo "<meta http-equiv='refresh' content='0'>"; 
 //header("Location:accept_crypto.php");
